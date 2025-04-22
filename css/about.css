@@ -35,6 +35,13 @@ body {
     padding: 0 20px;
 }
 
+.cta-section {
+    padding: 80px 0;
+    background-color: var(--secondary-color);
+    color: var(--light-text);
+    text-align: center;
+}
+
 a {
     text-decoration: none;
     color: inherit;
@@ -219,463 +226,6 @@ nav {
 }
 
 /* ==========================================
-   PÁGINA INICIAL - HERO BANNER
-   ========================================== */
-.hero-banner {
-    background-color: var(--secondary-color);
-    color: var(--light-text);
-    padding: 80px 0;
-}
-
-.hero-banner .container {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 40px;
-}
-
-.hero-content {
-    flex: 1;
-}
-
-.hero-image {
-    flex: 1;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.banner-icon-placeholder {
-    width: 300px;
-    height: 300px;
-    background-color: rgba(255, 255, 255, 0.1);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: rgba(255, 255, 255, 0.5);
-    font-size: 0.8rem;
-}
-
-.banner-icon {
-    width: 300px;
-    height: 300px;
-    object-fit: contain;
-}
-
-.hero-content h1 {
-    font-size: 3rem;
-    margin-bottom: 20px;
-}
-
-.hero-content p {
-    font-size: 1.2rem;
-    margin-bottom: 30px;
-}
-
-.hero-buttons {
-    display: flex;
-    justify-content: center;
-    gap: 15px;
-    flex-wrap: wrap;
-}
-
-/* ==========================================
-   PÁGINA INICIAL - SERVIÇOS EM DESTAQUE
-   ========================================== */
-.featured-services {
-    padding: 80px 0;
-    background-color: var(--light-text);
-}
-
-.featured-services h2 {
-    text-align: center;
-    color: var(--secondary-color);
-    margin-bottom: 50px;
-    font-size: 2.2rem;
-}
-
-.services-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 30px;
-}
-
-.service-card {
-    background-color: var(--complement-color);
-    border-radius: 8px;
-    padding: 30px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-    transition: var(--transition);
-    text-align: center;
-    opacity: 0;
-    transform: translateY(20px);
-    transition: opacity 0.5s ease, transform 0.5s ease;
-}
-
-.service-card.animate-in {
-    opacity: 1;
-    transform: translateY(0);
-}
-
-.service-card:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
-}
-
-.service-icon {
-    margin-bottom: 20px;
-}
-
-.icon-placeholder {
-    width: 70px;
-    height: 70px;
-    background-color: var(--primary-color);
-    border-radius: 50%;
-    margin: 0 auto;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--light-text);
-    font-size: 0.8rem;
-}
-
-.service-icon-img {
-    width: 70px;
-    height: 70px;
-    object-fit: contain;
-}
-
-.service-icon-fa {
-    font-size: 2.5rem;
-    color: var(--light-text);
-    background-color: var(--primary-color);
-    width: 70px;
-    height: 70px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.service-card h3 {
-    color: var(--secondary-color);
-    margin-bottom: 15px;
-    font-size: 1.5rem;
-}
-
-.service-card p {
-    margin-bottom: 20px;
-    color: var(--dark-text);
-}
-
-.service-link {
-    color: var(--primary-color);
-    font-weight: 600;
-    position: relative;
-    display: inline-block;
-}
-
-.service-link::after {
-    content: '';
-    position: absolute;
-    width: 0;
-    height: 2px;
-    bottom: -2px;
-    left: 0;
-    background-color: var(--primary-color);
-    transition: var(--transition);
-}
-
-.service-link:hover::after {
-    width: 100%;
-}
-
-/* ==========================================
-   PÁGINA INICIAL - DEPOIMENTOS
-   ========================================== */
-.testimonials {
-    padding: 80px 0;
-    background-color: var(--complement-color);
-}
-
-.testimonials h2 {
-    text-align: center;
-    color: var(--secondary-color);
-    margin-bottom: 50px;
-    font-size: 2.2rem;
-}
-
-.testimonials-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 30px;
-}
-
-.testimonial-card {
-    background-color: var(--light-text);
-    border-radius: 8px;
-    padding: 30px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-    opacity: 0;
-    transform: translateY(20px);
-    transition: opacity 0.5s ease, transform 0.5s ease;
-}
-
-.testimonial-card.animate-in {
-    opacity: 1;
-    transform: translateY(0);
-}
-
-.testimonial-content {
-    margin-bottom: 20px;
-}
-
-.testimonial-content p {
-    font-style: italic;
-    color: var(--dark-text);
-    line-height: 1.7;
-}
-
-.testimonial-author {
-    display: flex;
-    align-items: center;
-}
-
-.author-avatar {
-    width: 50px;
-    height: 50px;
-    background-color: var(--primary-color);
-    border-radius: 50%;
-    margin-right: 15px;
-}
-
-.avatar-img {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    object-fit: cover;
-}
-
-.author-info h4 {
-    color: var(--secondary-color);
-    margin-bottom: 5px;
-}
-
-.author-info p {
-    font-size: 0.9rem;
-    color: #777;
-}
-
-/* ==========================================
-   PÁGINA INICIAL - CTA
-   ========================================== */
-.cta-section {
-    padding: 80px 0;
-    background-color: var(--secondary-color);
-    color: var(--light-text);
-    text-align: center;
-}
-
-.cta-content {
-    max-width: 700px;
-    margin: 0 auto;
-}
-
-.cta-content h2 {
-    font-size: 2.5rem;
-    margin-bottom: 20px;
-}
-
-.cta-content p {
-    font-size: 1.2rem;
-    margin-bottom: 30px;
-}
-
-/* ==========================================
-   PÁGINA DE PROCEDIMENTOS - CATEGORIAS
-   ========================================== */
-.procedures-categories {
-    padding: 40px 0;
-    background-color: var(--light-text);
-}
-
-.categories-tabs {
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: 15px;
-}
-
-.category-tab {
-    padding: 10px 20px;
-    background-color: var(--complement-color);
-    border: none;
-    border-radius: 30px;
-    cursor: pointer;
-    font-weight: 600;
-    color: var(--secondary-color);
-    transition: var(--transition);
-}
-
-.category-tab:hover, .category-tab.active {
-    background-color: var(--primary-color);
-    color: var(--light-text);
-}
-
-/* ==========================================
-   PÁGINA DE PROCEDIMENTOS - LISTA
-   ========================================== */
-.procedures-list {
-    padding: 40px 0 80px;
-    background-color: var(--light-text);
-}
-
-.procedures-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 30px;
-}
-
-.procedure-card {
-    background-color: var(--complement-color);
-    border-radius: 8px;
-    overflow: hidden;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-    transition: var(--transition);
-    opacity: 0;
-    transform: translateY(20px);
-    transition: opacity 0.5s ease, transform 0.5s ease;
-}
-
-.procedure-card.animate-in {
-    opacity: 1;
-    transform: translateY(0);
-}
-
-.procedure-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
-}
-
-.procedure-image {
-    height: 200px;
-    background-color: var(--primary-color);
-}
-
-.image-placeholder {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: rgba(255, 255, 255, 0.5);
-    font-size: 0.8rem;
-}
-
-.procedure-img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
-.procedure-details {
-    padding: 20px;
-}
-
-.procedure-details h3 {
-    color: var(--secondary-color);
-    margin-bottom: 10px;
-    font-size: 1.3rem;
-}
-
-.procedure-meta {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 15px;
-    font-size: 0.9rem;
-}
-
-.duration {
-    color: #777;
-}
-
-.price {
-    font-weight: 700;
-    color: var(--primary-color);
-}
-
-.procedure-details p {
-    margin-bottom: 20px;
-    font-size: 0.95rem;
-}
-
-/* ==========================================
-   PÁGINA DE PROCEDIMENTOS - FAQ
-   ========================================== */
-.faq-section {
-    padding: 80px 0;
-    background-color: var(--complement-color);
-}
-
-.faq-section h2 {
-    text-align: center;
-    color: var(--secondary-color);
-    margin-bottom: 50px;
-    font-size: 2.2rem;
-}
-
-.faq-container {
-    max-width: 800px;
-    margin: 0 auto;
-}
-
-.faq-item {
-    background-color: var(--light-text);
-    border-radius: 8px;
-    margin-bottom: 15px;
-    overflow: hidden;
-}
-
-.faq-question {
-    padding: 20px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    cursor: pointer;
-}
-
-.faq-question h3 {
-    color: var(--secondary-color);
-    font-size: 1.1rem;
-    font-weight: 600;
-}
-
-.faq-toggle {
-    color: var(--primary-color);
-    font-size: 1.5rem;
-    font-weight: 700;
-    transition: transform 0.3s ease;
-}
-
-.faq-answer {
-    padding: 0 20px 20px;
-    display: none;
-}
-
-.faq-answer p {
-    color: #555;
-}
-
-.faq-item.active .faq-answer {
-    display: block;
-}
-
-.faq-item.active .faq-toggle {
-    transform: rotate(45deg);
-}
-
-/* ==========================================
    PÁGINA SOBRE NÓS - HISTÓRIA
    ========================================== */
 .our-story {
@@ -804,7 +354,7 @@ nav {
 }
 
 .team-image {
-    height: 300px;
+    height: 250px;
     background-color: var(--secondary-color);
 }
 
@@ -1116,15 +666,6 @@ footer .social-icon::after {
    RESPONSIVIDADE
    ========================================== */
 @media screen and (max-width: 992px) {
-    .hero-banner .container {
-        flex-direction: column;
-        text-align: center;
-    }
-    
-    .hero-buttons {
-        justify-content: center;
-    }
-    
     .story-content {
         flex-direction: column;
     }
@@ -1164,40 +705,22 @@ footer .social-icon::after {
         display: block;
     }
     
-    .hero-content h1 {
-        font-size: 2.2rem;
-    }
-    
-    .banner-icon-placeholder {
-        width: 200px;
-        height: 200px;
-    }
-    
     .page-header h1 {
         font-size: 2rem;
     }
 }
 
 @media screen and (max-width: 480px) {
-    .hero-banner {
-        padding: 60px 0;
-    }
-    
-    .hero-content h1 {
+    .page-header h1 {
         font-size: 1.8rem;
     }
     
-    .featured-services h2, .testimonials h2, .our-values h2, .our-team h2, .our-facilities h2, .certifications h2, .faq-section h2 {
+    .our-values h2, .our-team h2, .our-facilities h2, .certifications h2 {
         font-size: 1.8rem;
     }
     
-    .service-card, .procedure-card, .value-card, .team-card {
+    .value-card, .team-card {
         padding: 20px;
-    }
-    
-    .hero-buttons {
-        flex-direction: column;
-        gap: 10px;
     }
     
     .btn {
