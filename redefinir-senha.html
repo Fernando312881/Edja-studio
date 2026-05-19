@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Redefinir Senha - Edja Studio</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .form-container { 
+            background: white;
+            max-width: 400px; 
+            width: 100%;
+            margin: 20px; 
+            padding: 40px; 
+            border-radius: 15px; 
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1); 
+        }
+        .form-container h2 {
+            color: var(--secondary-color);
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 1.8rem;
+        }
+        .form-group { margin-bottom: 25px; }
+        .form-group label { 
+            display: block; 
+            margin-bottom: 8px; 
+            font-weight: 600;
+            color: var(--secondary-color);
+        }
+        .input-wrapper {
+            position: relative;
+        }
+        .input-wrapper i {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #aaa;
+        }
+        .form-group input { 
+            width: 100%; 
+            padding: 12px 12px 12px 40px; 
+            border: 1px solid #ddd; 
+            border-radius: 8px; 
+            font-size: 1rem;
+        }
+        .btn-submit {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 14px;
+            border-radius: 8px;
+            width: 100%;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        .btn-submit:hover {
+            background-color: #b57a77;
+        }
+        .password-requirements {
+            font-size: 0.8em;
+            color: #777;
+            margin-top: 5px;
+            padding-left: 5px;
+        }
+        .requirement {
+            display: block;
+            margin-bottom: 2px;
+        }
+        .requirement.met {
+            color: #27ae60;
+        }
+        .requirement.met i::before {
+            content: "\f00c";
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <h2>Nova Senha</h2>
+        <form id="resetPasswordForm">
+            <div class="form-group">
+                <label>Nova Senha</label>
+                <div class="input-wrapper">
+                    <i class="fas fa-lock"></i>
+                    <input type="password" id="novaSenha" required placeholder="Digite a nova senha">
+                </div>
+                <div class="password-requirements">
+                    <span class="requirement" id="req-length"><i class="fas fa-circle-notch fa-xs"></i> Mínimo 8 caracteres</span>
+                    <span class="requirement" id="req-upper"><i class="fas fa-circle-notch fa-xs"></i> Uma letra maiúscula</span>
+                    <span class="requirement" id="req-number"><i class="fas fa-circle-notch fa-xs"></i> Um número</span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Confirmar Senha</label>
+                <div class="input-wrapper">
+                    <i class="fas fa-check-double"></i>
+                    <input type="password" id="confirmarSenha" required placeholder="Confirme a senha">
+                </div>
+                <div id="matchError" style="color: red; font-size: 0.8rem; margin-top: 5px; display: none;">As senhas não coincidem.</div>
+            </div>
+            <button type="submit" class="btn-submit">Redefinir Senha</button>
+        </form>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        const form = document.getElementById('resetPasswordForm');
+        const senhaInput = document.getElementById('novaSenha');
+        const confirmarInput = document.getElementById('confirmarSenha');
+        const urlParams = new URLSearchParams(window.location.search);
+        const token = urlParams.get('token');
+
+        if (!token) {
+            alert('Token de recuperação inválido ou ausente.');
+            window.location.href = 'login.html';
+        }
+
+        senhaInput.addEventListener('input', () => {
+            const val = senhaInput.value;
+            document.getElementById('req-length').className = 'requirement' + (val.length >= 8 ? ' met' : '');
+            document.getElementById('req-upper').className = 'requirement' + (/[A-Z]/.test(val) ? ' met' : '');
+            document.getElementById('req-number').className = 'requirement' + (/[0-9]/.test(val) ? ' met' : '');
+        });
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const novaSenha = senhaInput.value;
+            const confirmarSenha = confirmarInput.value;
+
+            if (novaSenha !== confirmarSenha) {
+                document.getElementById('matchError').style.display = 'block';
+                return;
+            }
+
+            try {
+                const btn = form.querySelector('button');
+                btn.disabled = true;
+                btn.innerText = 'Processando...';
+                
+                await apiService.auth.resetPassword(token, novaSenha);
+                window.location.href = 'login.html?reset=success';
+            } catch (err) {
+                alert('Erro ao redefinir senha: ' + err.message);
+                btn.disabled = false;
+                btn.innerText = 'Redefinir Senha';
+            }
+        });
+    </script>
+</body>
+</html>

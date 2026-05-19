@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Área do Aluno - Edja Studio</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <script>
+        // Proteção de rota simples
+        if (!localStorage.getItem('edja_token')) {
+            window.location.href = 'login.html';
+        }
+    </script>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <nav style="display: flex; justify-content: space-between; align-items: center;">
+                <div class="logo-space">
+                    <img src="images/logopqn1.png" width="50" height="20" />
+                    <span class="logo-text">Edja studio</span>
+                </div>
+                <div>
+                    <span id="userNameDisplay" style="margin-right: 20px;"></span>
+                    <button onclick="apiService.auth.logout()" class="btn btn-sm" style="background: #ff4444;">Sair</button>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container" style="padding: 50px 0;">
+        <h1>Meus Cursos</h1>
+        <p>Bem-vinda à sua área de aprendizado!</p>
+
+        <div class="services-grid" style="margin-top: 30px;">
+            <div class="service-card" onclick="alert('Acessando conteúdo do curso...')" style="cursor: pointer;">
+                <div class="service-icon">
+                    <img src="images/cilios.png" alt="Curso" style="width: 100%; height: 100%; object-fit: contain;">
+                </div>
+                <h3>Curso de Extensão de Cílios</h3>
+                <p>Clique para acessar as aulas e materiais.</p>
+                <div style="margin-top: 15px; color: #d4af37; font-weight: bold;">Status: Ativo</div>
+            </div>
+        </div>
+    </main>
+
+    <script src="script.js"></script>
+    <script>
+        const user = JSON.parse(localStorage.getItem('edja_user'));
+        if (user) {
+            document.getElementById('userNameDisplay').innerText = 'Olá, ' + (user.nome || user.email);
+        }
+    </script>
+</body>
+</html>

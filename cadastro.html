@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro - Edja Studio</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+    <style>
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .form-container { 
+            background: white;
+            max-width: 500px; 
+            width: 100%;
+            margin: 20px; 
+            padding: 40px; 
+            border-radius: 15px; 
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1); 
+        }
+        .form-container h2 {
+            color: var(--secondary-color);
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2rem;
+        }
+        .form-group { margin-bottom: 20px; }
+        .form-group label { 
+            display: block; 
+            margin-bottom: 8px; 
+            font-weight: 600;
+            color: var(--secondary-color);
+        }
+        .input-wrapper {
+            position: relative;
+        }
+        .input-wrapper i {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #aaa;
+        }
+        .form-group input { 
+            width: 100%; 
+            padding: 12px 12px 12px 40px; 
+            border: 1px solid #ddd; 
+            border-radius: 8px; 
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+        .error { color: #e74c3c; font-size: 0.85em; margin-top: 5px; min-height: 1em; }
+        .password-requirements {
+            font-size: 0.8em;
+            color: #777;
+            margin-top: 5px;
+            padding-left: 5px;
+        }
+        .requirement {
+            display: block;
+            margin-bottom: 2px;
+        }
+        .requirement.met {
+            color: #27ae60;
+        }
+        .requirement.met i::before {
+            content: "\f00c";
+        }
+        .btn-submit {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 14px;
+            border-radius: 8px;
+            width: 100%;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+            margin-top: 10px;
+        }
+        .btn-submit:hover {
+            background-color: #b57a77;
+        }
+        .login-link {
+            text-align: center;
+            margin-top: 25px;
+            font-size: 0.95rem;
+        }
+        .login-link a {
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <h2>Criar Conta</h2>
+        <form id="cadastroForm">
+            <div class="form-group">
+                <label>Nome Completo</label>
+                <div class="input-wrapper">
+                    <i class="fas fa-user"></i>
+                    <input type="text" id="nome" placeholder="Seu nome completo" required>
+                </div>
+                <div id="nomeError" class="error"></div>
+            </div>
+            <div class="form-group">
+                <label>Email</label>
+                <div class="input-wrapper">
+                    <i class="fas fa-envelope"></i>
+                    <input type="email" id="email" placeholder="seu@email.com" required>
+                </div>
+                <div id="emailError" class="error"></div>
+            </div>
+            <div class="form-group">
+                <label>CPF</label>
+                <div class="input-wrapper">
+                    <i class="fas fa-id-card"></i>
+                    <input type="text" id="cpf" placeholder="000.000.000-00" required>
+                </div>
+                <div id="cpfError" class="error"></div>
+            </div>
+            <div class="form-group">
+                <label>Senha</label>
+                <div class="input-wrapper">
+                    <i class="fas fa-lock"></i>
+                    <input type="password" id="senha" placeholder="Sua senha" required>
+                </div>
+                <div class="password-requirements" id="passwordRequirements">
+                    <span class="requirement" id="req-length"><i class="fas fa-circle-notch fa-xs"></i> Mínimo 8 caracteres</span>
+                    <span class="requirement" id="req-upper"><i class="fas fa-circle-notch fa-xs"></i> Uma letra maiúscula</span>
+                    <span class="requirement" id="req-number"><i class="fas fa-circle-notch fa-xs"></i> Um número</span>
+                </div>
+                <div id="senhaError" class="error"></div>
+            </div>
+            <div class="form-group" style="display: flex; justify-content: center;">
+                <div class="cf-turnstile" data-sitekey="0x4AAAAAADJZjCWnmmjJ-6Mx" data-theme="light"></div>
+            </div>
+            <button type="submit" class="btn-submit">Finalizar Cadastro</button>
+        </form>
+        <p class="login-link">Já tem uma conta? <a href="login.html">Faça login</a></p>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        const form = document.getElementById('cadastroForm');
+        const senhaInput = document.getElementById('senha');
+        const emailInput = document.getElementById('email');
+        const cpfInput = document.getElementById('cpf');
+
+        // Real-time password validation
+        senhaInput.addEventListener('input', () => {
+            const val = senhaInput.value;
+
+            const hasMinLength = val.length >= 8;
+            const hasUpper = /[A-Z]/.test(val);
+            const hasNumber = /[0-9]/.test(val);
+
+            document.getElementById('req-length').className = 'requirement' + (hasMinLength ? ' met' : '');
+            document.getElementById('req-upper').className = 'requirement' + (hasUpper ? ' met' : '');
+            document.getElementById('req-number').className = 'requirement' + (hasNumber ? ' met' : '');
+        });
+
+        // Simple CPF mask
+        cpfInput.addEventListener('input', (e) => {
+            let value = e.target.value.replace(/\D/g, '');
+            if (value.length > 11) value = value.slice(0, 11);
+
+            if (value.length > 9) {
+                value = value.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, "$1.$2.$3-$4");
+            } else if (value.length > 6) {
+                value = value.replace(/(\d{3})(\d{3})(\d{3})/, "$1.$2.$3");
+            } else if (value.length > 3) {
+                value = value.replace(/(\d{3})(\d{3})/, "$1.$2");
+            }
+            e.target.value = value;
+        });
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            // Clear errors
+            document.querySelectorAll('.error').forEach(el => el.innerText = '');
+
+            const nome = document.getElementById('nome').value;
+            const email = emailInput.value;
+            const cpfRaw = cpfInput.value;
+            const senha = senhaInput.value;
+
+            // Clean CPF for API
+            const cpf = cpfRaw.replace(/\D/g, '');
+            const turnstileResponse = document.querySelector('[name="cf-turnstile-response"]').value;
+
+            if (!turnstileResponse) {
+                alert('Por favor, confirme que você não é um robô.');
+                return;
+            }
+
+            let hasError = false;
+
+            // Email validation (regex for @ and domain)
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                document.getElementById('emailError').innerText = 'Por favor, insira um email válido.';
+                hasError = true;
+            }
+
+            // CPF validation
+            if (!validarCPF(cpfRaw)) {
+                document.getElementById('cpfError').innerText = 'CPF Inválido';
+                hasError = true;
+            }
+
+            // Password validation
+            const hasMinLength = senha.length >= 8;
+            const hasUpper = /[A-Z]/.test(senha);
+            const hasNumber = /[0-9]/.test(senha);
+
+            if (!hasMinLength || !hasUpper || !hasNumber) {
+                document.getElementById('senhaError').innerText = 'A senha não atende a todos os requisitos.';
+                hasError = true;
+            }
+
+            if (hasError) return;
+
+            try {
+                const btn = form.querySelector('button');
+                btn.disabled = true;
+                btn.innerText = 'Cadastrando...';
+
+                await apiService.auth.register({ 
+                    nome, 
+                    email, 
+                    senha, 
+                    cpf,
+                    telefone: "",
+                    captchaToken: turnstileResponse
+                });
+                window.location.href = 'login.html?success=true';
+            } catch (err) {
+                if (err.message.includes('já cadastrado') || err.message.includes('Conflict')) {
+                    alert('Este CPF ou Email já está cadastrado. Por favor, faça login.');
+                    window.location.href = 'login.html';
+                } else {
+                    alert('Erro ao cadastrar: ' + err.message);
+                }
+                btn.disabled = false;
+                btn.innerText = 'Finalizar Cadastro';
+                if (window.turnstile) turnstile.reset();
+            }
+        });
+
+        function validarCPF(cpf) {
+            cpf = cpf.replace(/[^\d]+/g,'');
+            if(cpf == '') return false;
+            if (cpf.length != 11 || 
+                cpf == "00000000000" || cpf == "11111111111" || 
+                cpf == "22222222222" || cpf == "33333333333" || 
+                cpf == "44444444444" || cpf == "55555555555" || 
+                cpf == "66666666666" || cpf == "77777777777" || 
+                cpf == "88888888888" || cpf == "99999999999")
+                return false;
+            let add = 0;
+            for (let i=0; i < 9; i ++)
+                add += parseInt(cpf.charAt(i)) * (10 - i);
+            let rev = 11 - (add % 11);
+            if (rev == 10 || rev == 11) rev = 0;
+            if (rev != parseInt(cpf.charAt(9))) return false;
+            add = 0;
+            for (let i = 0; i < 10; i ++)
+                add += parseInt(cpf.charAt(i)) * (11 - i);
+            rev = 11 - (add % 11);
+            if (rev == 10 || rev == 11) rev = 0;
+            if (rev != parseInt(cpf.charAt(10))) return false;
+            return true;
+        }
+    </script>
+</body>
+</html>

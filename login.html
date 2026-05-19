@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Aluno - Edja Studio</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+    <style>
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .form-container { 
+            background: white;
+            max-width: 400px; 
+            width: 100%;
+            margin: 20px; 
+            padding: 40px; 
+            border-radius: 15px; 
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1); 
+        }
+        .form-container h2 {
+            color: var(--secondary-color);
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2rem;
+        }
+        .form-group { margin-bottom: 25px; }
+        .form-group label { 
+            display: block; 
+            margin-bottom: 8px; 
+            font-weight: 600;
+            color: var(--secondary-color);
+        }
+        .input-wrapper {
+            position: relative;
+        }
+        .input-wrapper i {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #aaa;
+        }
+        .form-group input { 
+            width: 100%; 
+            padding: 12px 12px 12px 40px; 
+            border: 1px solid #ddd; 
+            border-radius: 8px; 
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+        .error { color: #e74c3c; font-size: 0.85em; margin-top: 5px; min-height: 1em; }
+        .btn-submit {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 14px;
+            border-radius: 8px;
+            width: 100%;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        .btn-submit:hover {
+            background-color: #b57a77;
+        }
+        .success-message {
+            background-color: #d4edda;
+            color: #155724;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+            text-align: center;
+            font-size: 0.9rem;
+            border: 1px solid #c3e6cb;
+            display: none;
+        }
+        .register-link {
+            text-align: center;
+            margin-top: 25px;
+            font-size: 0.95rem;
+        }
+        .register-link a {
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <h2>Área do Aluno</h2>
+        <div id="successMessage" class="success-message">
+            <i class="fas fa-check-circle"></i> <span id="successText">Cadastro realizado com sucesso! Faça login para continuar.</span>
+        </div>
+        <form id="loginForm">
+            <div class="form-group">
+                <label>E-mail</label>
+                <div class="input-wrapper">
+                    <i class="fas fa-envelope"></i>
+                    <input type="email" id="email" required placeholder="seu@email.com">
+                </div>
+                <div id="emailError" class="error"></div>
+            </div>
+            <div class="form-group">
+                <label>Senha</label>
+                <div class="input-wrapper">
+                    <i class="fas fa-lock"></i>
+                    <input type="password" id="senha" required placeholder="Sua senha">
+                </div>
+                <div id="senhaError" class="error"></div>
+                <div style="text-align: right; margin-top: 5px;">
+                    <a href="esqueci-senha.html" style="font-size: 0.85rem; color: var(--primary-color);">Esqueceu a senha?</a>
+                </div>
+            </div>
+            <div class="form-group" style="display: flex; justify-content: center;">
+                <div class="cf-turnstile" data-sitekey="0x4AAAAAADJZjCWnmmjJ-6Mx" data-theme="light"></div>
+            </div>
+            <button type="submit" class="btn-submit">Entrar</button>
+        </form>
+        <p class="register-link">Não tem uma conta? <a href="cadastro.html">Cadastre-se aqui</a></p>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        const form = document.getElementById('loginForm');
+        const emailInput = document.getElementById('email');
+
+        // Check for success message in URL
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('success') === 'true') {
+            document.getElementById('successMessage').style.display = 'block';
+        } else if (urlParams.get('reset') === 'success') {
+            document.getElementById('successText').innerText = 'Senha alterada com sucesso! Faça login com sua nova senha.';
+            document.getElementById('successMessage').style.display = 'block';
+        }
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            // Clear errors
+            document.querySelectorAll('.error').forEach(el => el.innerText = '');
+
+            const email = emailInput.value;
+            const senha = document.getElementById('senha').value;
+            const turnstileResponse = document.querySelector('[name="cf-turnstile-response"]').value;
+
+            if (!turnstileResponse) {
+                alert('Por favor, confirme que você não é um robô.');
+                return;
+            }
+
+            // Email validation
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                document.getElementById('emailError').innerText = 'Por favor, insira um email válido.';
+                return;
+            }
+
+            try {
+                const btn = form.querySelector('button');
+                btn.disabled = true;
+                btn.innerText = 'Entrando...';
+                
+                await apiService.auth.login(email, senha, turnstileResponse);
+                window.location.href = 'area-aluno.html';
+            } catch (err) {
+                alert('Erro ao entrar: ' + err.message);
+                btn.disabled = false;
+                btn.innerText = 'Entrar';
+                // Reset turnstile
+                if (window.turnstile) turnstile.reset();
+            }
+        });
+    </script>
+</body>
+</html>
